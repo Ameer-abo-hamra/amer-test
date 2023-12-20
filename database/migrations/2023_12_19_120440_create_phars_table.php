@@ -14,7 +14,11 @@ return new class extends Migration
         Schema::create('phars', function (Blueprint $table) {
             $table->id();
             $table->string("username");
+<<<<<<< HEAD
             $table->integer("phone_number");
+=======
+            $table->bigInteger("phone_number");
+>>>>>>> 535bc87032b1c3e1d50b2434698169e9cdad3d7d
             $table->string("password");
             $table->timestamps();
         });

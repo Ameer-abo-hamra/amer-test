@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+<<<<<<< HEAD
 use App\Models\Phar;
 use Illuminate\Http\Request;
 use Validator;
@@ -63,4 +64,11 @@ class PharController extends Controller
 
 
     }
+=======
+use Illuminate\Http\Request;
+
+class PharController extends Controller
+{
+    //
+>>>>>>> 535bc87032b1c3e1d50b2434698169e9cdad3d7d
 }

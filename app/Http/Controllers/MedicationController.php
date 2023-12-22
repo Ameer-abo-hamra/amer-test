@@ -68,4 +68,51 @@ class MedicationController extends Controller
         ]);
 
     }
+
+    public function search(Request $request)
+    {
+
+        $key = $request->key;
+
+        $med = Medication::where("cat", "LIKE", "%$key%")
+            ->orwhere("commercial_name", "LIKE", "%$key%")
+            ->orwhere("scientific_name", "LIKE", "%$key%")->get();
+        if ($med) {
+            return response()->json([
+
+                "status" => true,
+                "message" => "done",
+                "statusNumber" => 200,
+                "medicines" => $med->makeHidden(["expire_date", "quantity", "manufacturer", "commercial_name"])
+
+            ]);
+        }
+
+        return response()->json([
+
+            "status" => false,
+            "message" => "Oops",
+            "statusNumber" => 400
+        ]);
+    }
+
+    public function showDetails($id)
+    {
+
+        $med = Medication::find($id);
+        if ($med) {
+            return response()->json([
+                "status" => true,
+                "message" => "done",
+                "statusNumber" => 200,
+                "details" => $med
+            ]);
+        }
+        return response()->json([
+            "status" => false,
+            "message" => "Oops",
+            "statusNumber" => 400,
+
+        ]);
+    }
 }

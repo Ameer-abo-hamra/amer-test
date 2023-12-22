@@ -9,10 +9,10 @@ class Medication extends Model
 {
     use HasFactory;
 
-    protected $fillable = ["scientific_name", 'commercial_name', "cat", "manufacturer", 'quantity', "expire_date", "price"];
-    protected $hidden = ["created_at" , "updated_at"];
+    protected $fillable = ["scientific_name", 'commercial_name', "cat", "manufacturer", "quantity", "expire_date", "price"];
+    protected $hidden = ["created_at", "updated_at", "id"];
     public function requests()
     {
-        return $this->belongsToMany(Req::class, "med_req_pivot");
+        return $this->belongsToMany(Req::class, "med_req_pivot")->withPivot('quantity');
     }
 }

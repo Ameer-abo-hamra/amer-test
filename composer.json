@@ -9,12 +9,8 @@
         "guzzlehttp/guzzle": "^7.2",
         "laravel/framework": "^10.10",
         "laravel/sanctum": "^3.2",
-<<<<<<< HEAD
         "laravel/tinker": "^2.8",
         "tymon/jwt-auth": "*"
-=======
-        "laravel/tinker": "^2.8"
->>>>>>> 535bc87032b1c3e1d50b2434698169e9cdad3d7d
     },
     "require-dev": {
         "fakerphp/faker": "^1.9.1",

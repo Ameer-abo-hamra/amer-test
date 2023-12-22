@@ -23,7 +23,7 @@ class PharController extends Controller
 
                 "username" => "unique:Phars,username|| max:12 ||min:4 || required",
                 "password" => "min:8 ||max:15 || required",
-                "phone_number" => "required|digits:10"
+                "phone_number" => "required|digits:10 | unique:Phars"
             ]);
 
             if ($validator->fails()) {
@@ -112,6 +112,9 @@ class PharController extends Controller
     }
     public function logout(Request $request)
     {
+
+            // $user = Auth::guard("api")->user();
+            // return $user;
         try {
             $token = $request->bearerToken();
             if ($token) {

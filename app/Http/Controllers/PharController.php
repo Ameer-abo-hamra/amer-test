@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Medication;
 use App\Models\Phar;
 use Exception;
 use Illuminate\Http\Request;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use Validator;
+use Illuminate\Support\Carbon;
+
 use Illuminate\Support\Facades\Config;
 
 use Hash;
@@ -113,8 +116,8 @@ class PharController extends Controller
     public function logout(Request $request)
     {
 
-            // $user = Auth::guard("api")->user();
-            // return $user;
+        // $user = Auth::guard("api")->user();
+        // return $user;
         try {
             $token = $request->bearerToken();
             if ($token) {
@@ -144,6 +147,61 @@ class PharController extends Controller
             ]);
         }
     }
+    public function addToFavorite($id)
+    {
+        $med = Medication::find($id);
+        if ($med) {
+
+            $user = Auth::guard("api")->user();
+            $user->favorites()->attach($med);
+            return response()->json([
+                "status" => true,
+                "message" => "The medicine has been added to your favorites :)",
+                "statusNumber" => 200
+
+            ]);
+        }
+        return response()->json([
+            "status" => false,
+            "message" => "The medicine is not currently available",
+            "statusNumber" => 400
+
+        ]);
+
+    }
+
+    public function requestReport()
+    {
+
+        $phar = Auth::guard("api")->user();
+        $startDate = Carbon::now()->subDays(14);
+        $endDate = Carbon::now();
+        $requests = $phar->with(["requests"=> function($q) {
+            $q->select(["phar_id","payment_state","receive_state","price"]);
+
+        }]
+
+        )->with(["medications"=>function($q){
 
 
+        }])->select(["username","id"])->
+        get();
+        if ($requests) {
+            return response()->json([
+
+                "status" => true,
+                "message" => "done",
+                "statusNumber" => 200,
+                "requests" => $requests
+
+            ]);
+        }
+
+        return response()->json([
+
+            "status" => false,
+            "message" => "you do not have any requests yet",
+            "statusNumber" => 400,
+        ]);
+    }
 }

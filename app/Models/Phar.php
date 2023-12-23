@@ -21,7 +21,10 @@ class Phar extends Authenticatable implements JWTSubject
     }
 
 
+    public function favorites() {
 
+        return $this -> belongsToMany(Medication::class , "med_phar");
+    }
 
 
 

@@ -15,6 +15,7 @@ class ReqController extends Controller
         $request->validate([
             'products.*.id' => 'required|exists:medications,id',
             'products.*.quantity' => 'required|integer|min:1',
+            'products.*.price' => 'required|numeric|min:1',
         ]);
         $price = 0;
         for ($i = 0; $i < count($request->products); $i++) {
@@ -61,14 +62,21 @@ class ReqController extends Controller
     {
 
         $requests = Req::get();
-        // return response()->json([
-        //     "status" => true,
-        //     "message" => "done",
-        //     "statusNumber" => 200,
-        //     "requests" =>$requests->makeHidden(["id","phar_id"])
-        // ]);
+        if($requests) {
+            return response()->json([
+                "status" => true,
+                "message" => "done",
+                "statusNumber" => 200,
+                "requests" =>$requests->makeHidden(["id","phar_id" , "isUpdated"])
+            ]);
 
-        return view("table", compact("requests"));
+        }
+        return response()->json([
+            "status" => false,
+            "message" => "there are no requests yet ",
+            "statusNumber" => 400
+        ]);
+
     }
 
 

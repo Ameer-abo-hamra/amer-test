@@ -15,4 +15,10 @@ class Medication extends Model
     {
         return $this->belongsToMany(Req::class, "med_req_pivot")->withPivot('quantity');
     }
+
+
+    public function pharmacists()
+    {
+        return $this->belongsToMany(Phar::class, 'med_phar');
+    }
 }

@@ -20,25 +20,30 @@ use App\Http\Controllers\PharController;
 Route::post("register", [PharController::Class, "register"]);
 Route::post("login", [PharController::class, "login"]);
 
-    Route::group(["middleware"=> "CustomAuthorization"], function () {
-        Route::post("logout", [PharController::class, "logout"]);
+Route::group(["middleware" => "CustomAuthorization"], function () {
 
-Route::get("browse-medication", [MedicationController::Class, "browseMedications"]);
+    Route::post("logout", [PharController::class, "logout"]);
 
-Route::post("search", [MedicationController::class, "search"]);
-Route::get('show-details/{med_id}', [MedicationController::class, "showDetails"]);
+    Route::get("browse-medication", [MedicationController::Class, "browseMedications"]);
 
+    Route::post("search", [MedicationController::class, "search"]);
 
-Route::post("add-req", [ReqController::class, "addReq"]);
+    Route::get('show-details/{med_id}', [MedicationController::class, "showDetails"]);
 
-Route::get("show-requests", [ReqController::class, "showRequests"]);
-    });
+    Route::post("add-req", [ReqController::class, "addReq"]);
+
+    Route::get("show-requests", [ReqController::class, "showRequests"]);
+
+    Route::get("add-to-favorites/{med_id}" , [PharController::class , "addToFavorite"]);
+
+    Route::get("request-report" , [PharController::class , "requestReport"]);
+});
 
 
 ##############   Admin Routes   ##############
 
 Route::post("add-medicine", [MedicationController::class, "addMedicine"]);
 
-Route::post("show-reqs" , [ReqController::class , "allRequests"]);
+Route::get("show-reqs", [ReqController::class, "allRequests"]);
 
-Route::post("change-state" , [ReqController::class , "changeState"])->name("change");
+Route::post("change-state", [ReqController::class, "changeState"])->name("change");

@@ -37,13 +37,13 @@ Route::group(["middleware" => "CustomAuthorization"], function () {
     Route::get("add-to-favorites/{med_id}" , [PharController::class , "addToFavorite"]);
 
     Route::get("request-report" , [PharController::class , "requestReport"]);
+
+    Route::get("request-details/{request_id}" , [PharController::class , "requestDetails"]);
 });
 
 
 ##############   Admin Routes   ##############
 
-Route::post("add-medicine", [MedicationController::class, "addMedicine"]);
 
-Route::get("show-reqs", [ReqController::class, "allRequests"]);
 
-Route::post("change-state", [ReqController::class, "changeState"])->name("change");
+

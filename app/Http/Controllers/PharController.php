@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Medication;
 use App\Models\Phar;
+use App\Models\Req;
 use Exception;
 use Illuminate\Http\Request;
 use Tymon\JWTAuth\Facades\JWTAuth;
@@ -176,23 +177,14 @@ class PharController extends Controller
         $phar = Auth::guard("api")->user();
         $startDate = Carbon::now()->subDays(14);
         $endDate = Carbon::now();
-        $requests = $phar->with(["requests"=> function($q) {
-            $q->select(["phar_id","payment_state","receive_state","price"]);
-
-        }]
-
-        )->with(["medications"=>function($q){
-
-
-        }])->select(["username","id"])->
-        get();
+        $requests = $phar->requests()->whereBetween("created_at", ["$startDate", "$endDate"])->get();
         if ($requests) {
             return response()->json([
 
                 "status" => true,
                 "message" => "done",
                 "statusNumber" => 200,
-                "requests" => $requests
+                "requests" => $requests->makeHidden("isUpdated")
 
             ]);
         }
@@ -201,6 +193,27 @@ class PharController extends Controller
 
             "status" => false,
             "message" => "you do not have any requests yet",
+            "statusNumber" => 400,
+        ]);
+    }
+
+    public function requestDetails($id)
+    {
+
+        $req = Req::find($id);
+        if ($req) {
+
+            return response()->json([
+                "status" => true,
+                "message" => "done",
+                "statusNumber" => 200,
+                "details" => $req->medications->makeHidden(['quantity','pivot'])
+
+            ]);
+        }
+        return response()->json([
+            "status" => true,
+            "message" => "there are smth wrong",
             "statusNumber" => 400,
         ]);
     }

@@ -38,7 +38,7 @@ return [
     'guards' => [
         'web' => [
             'driver' => 'session',
-            'provider' => 'users',
+            'provider' => 'storeKeepers',
         ],
         'api' => [
             'driver' => 'jwt',
@@ -64,9 +64,9 @@ return [
     */
 
     'providers' => [
-        'users' => [
+        'storeKeepers' => [
             'driver' => 'eloquent',
-            'model' => App\Models\User::class,
+            'model' => App\Models\Storekeeper::class,
         ],
         'Phars' => [
             'driver' => 'eloquent',

@@ -6,6 +6,7 @@ use App\Events\UpdateState;
 use Illuminate\Http\Request;
 use App\Models\Req;
 use Auth;
+use Illuminate\Support\Carbon;
 
 class ReqController extends Controller
 {
@@ -62,12 +63,12 @@ class ReqController extends Controller
     {
 
         $requests = Req::get();
-        if($requests) {
+        if ($requests) {
             return response()->json([
                 "status" => true,
                 "message" => "done",
                 "statusNumber" => 200,
-                "requests" =>$requests->makeHidden(["id","phar_id" , "isUpdated"])
+                "requests" => $requests->makeHidden(["id", "phar_id", "isUpdated"])
             ]);
 
         }
@@ -111,5 +112,26 @@ class ReqController extends Controller
 
         }
         return "data is updated ";
+    }
+
+    public function paymentsReport()
+    {
+        $endDate = Carbon::now();
+        $startDate = Carbon::now()->subDays(14);
+        $requests = Req::where("payment_state", "مدفوع")->whereBetween("created_at", ["$startDate", "$endDate"])->get();
+
+        $income = 0;
+        foreach ($requests as $request) {
+
+            $income += $request->price;
+        }
+        return view("report", compact(["requests", "income"]));
+    }
+
+    public function requestOwner($id) {
+
+        $req = Req::find($id);
+        return $req->pharmacist->makeVisible("created_at");
+
     }
 }

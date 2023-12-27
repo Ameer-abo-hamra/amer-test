@@ -41,4 +41,5 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get("payments-report" , [ReqController::class, "paymentsReport"]);
 
     Route::get("request-owner/{req_id}" , [ReqController::class , "requestOwner"]);
+
 });

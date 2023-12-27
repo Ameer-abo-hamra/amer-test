@@ -154,7 +154,7 @@ class PharController extends Controller
         if ($med) {
 
             $user = Auth::guard("api")->user();
-            $user->favorites()->attach($med);
+            $user->favorites()->syncWithoutDetaching($med);
             return response()->json([
                 "status" => true,
                 "message" => "The medicine has been added to your favorites :)",

@@ -84,51 +84,60 @@ class ReqController extends Controller
     public function changeState(Request $request)
     {
 
-        $payment_state = array_filter($request->payment_state);
-        $receive_state = array_filter($request->receive_state);
-        foreach ($payment_state as $key => $pay) {
-
-            Req::find($key)->update([
-                "payment_state" => $payment_state[$key]
-            ]);
-
-        }
-
-        foreach ($receive_state as $key => $rec) {
-
-            $req = Req::find($key);
+        $requests_ids = $request->requests_ids;
+        $payment_state = $request->payment_state;
+        $receive_state = $request->receive_state;
+        foreach ($requests_ids as $key => $request_id) {
+            $req = Req::find($request_id);
             $isUpdated = $req->isUpdated;
-
-            if ($receive_state[$key] == "مستلمة" && !$isUpdated) {
+            $req->update([
+                "payment_state" => $payment_state[$key],
+                "receive_state" => $receive_state[$key]
+            ]);
+            if ($receive_state[$key] == "received" && !$isUpdated) {
                 $req->update([
                     "isUpdated" => true,
-                    "receive_state" => $receive_state[$key]
                 ]);
                 UpdateState::dispatch($req);
             }
-            $req->update([
-                "receive_state" => $receive_state[$key]
-            ]);
 
         }
-        return "data is updated ";
+
+        return response()->json([
+            "status" => true,
+            "message" => "data is updated "
+            ,
+            "statusNumber" => 200
+        ]);
     }
 
     public function paymentsReport()
     {
         $endDate = Carbon::now();
         $startDate = Carbon::now()->subDays(14);
-        $requests = Req::where("payment_state", "مدفوع")->whereBetween("created_at", ["$startDate", "$endDate"])->get();
+        $requests = Req::where("payment_state", "paid")->whereBetween("created_at", ["$startDate", "$endDate"])->get();
 
-        $income = 0;
-        foreach ($requests as $request) {
+        if (count($requests)) {
+            $income = 0;
+            foreach ($requests as $request) {
 
-            $income += $request->price;
+                $income += $request->price;
+            }
+            return response()->json([
+                "status" => true,
+                "statusNumber" => 200,
+                "incoming" => $income
+            ]);
         }
-        return view("report", compact(["requests", "income"]));
+        return response()->json([
+            "status" => false,
+            "statusNumber" => 400,
+            "message" => "there are no payments yet"
+        ]);
     }
 
-    public function requestOwner($id) {
+    public function requestOwner($id)
+    {
 
         $req = Req::find($id);
         return $req->pharmacist->makeVisible("created_at");

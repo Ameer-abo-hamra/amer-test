@@ -17,8 +17,8 @@ class DatabaseSeeder extends Seeder
         // \App\Models\User::factory(10)->create();
 
         Storekeeper::create([
-            'username' => 'Ameer',
             'password' => Hash::make("123456789"),
+            'username' => 'Ma3rof',
         ]);
     }
 }

@@ -117,8 +117,7 @@ class PharController extends Controller
     public function logout(Request $request)
     {
 
-        // $user = Auth::guard("api")->user();
-        // return $user;
+
         try {
             $token = $request->bearerToken();
             if ($token) {
@@ -207,7 +206,7 @@ class PharController extends Controller
                 "status" => true,
                 "message" => "done",
                 "statusNumber" => 200,
-                "details" => $req->medications->makeHidden(['quantity','pivot'])
+                "details" => $req->medications->makeHidden(['quantity', 'pivot'])->makeVisible("id")
 
             ]);
         }

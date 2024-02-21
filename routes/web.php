@@ -17,20 +17,25 @@ use App\Http\Controllers\ReqController;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
-Route::get("go-login", function () {
 
-    return view("login");
-})->name("go-login");
+Route::get(
+    "get-token",
+    function () {
+        return response()->json([
+            "status" => true,
+            "csrf_token" => csrf_token(),
+            'statusNumber' => 200
+
+        ]);
+    }
+);
 
 Route::post("login", [StorekeeperController::class, "login"])->name("login");
 
 
-Route::group(['middleware' => 'auth'], function () {
+Route::group(['middleware' => 'authuser'], function () {
 
-    Route::get("logout" , [StorekeeperController::class  , 'logout']);
+    Route::get("logout", [StorekeeperController::class, 'logout']);
 
     Route::post("add-medicine", [MedicationController::class, "addMedicine"]);
 
@@ -38,8 +43,8 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::post("change-state", [ReqController::class, "changeState"])->name("change");
 
-    Route::get("payments-report" , [ReqController::class, "paymentsReport"]);
+    Route::get("payments-report", [ReqController::class, "paymentsReport"]);
 
-    Route::get("request-owner/{req_id}" , [ReqController::class , "requestOwner"]);
+    Route::get("request-owner/{req_id}", [ReqController::class, "requestOwner"]);
 
 });

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Validator;
 use Auth;
+
 class StorekeeperController extends Controller
 {
     public function login(Request $request)
@@ -15,7 +16,7 @@ class StorekeeperController extends Controller
             "password" => "required"
 
         ]);
-        if ($validator->failed()) {
+        if ($validator->fails()) {
             return response()->json([
                 "status" => false,
                 "message" => $validator->errors()->first(),
@@ -24,16 +25,29 @@ class StorekeeperController extends Controller
         }
 
         $credentials = $request->only(["username", "password"]);
-        if($token = Auth::attempt($credentials)){
-            return  Auth::user()->makeHidden("created_at");
+        if (Auth::attempt($credentials)) {
+            return response()->json([
+                "user" => Auth::user()->makeHidden("created_at")
+            ]);
         }
+
+        return response()->json([
+
+            "status" => false
+        ]);
     }
 
-    public function logout() {
+    public function logout()
+    {
 
-      Auth::logout();
+        Auth::logout();
+        return response()->json([
 
-      return redirect()->to("/");
+            "status" => true,
+            "message" => "you are logged-out seccessfully",
+            "statusNember" => 200
+        ]);
+
 
     }
 }

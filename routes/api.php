@@ -18,6 +18,7 @@ use App\Http\Controllers\PharController;
 */
 
 Route::post("register", [PharController::Class, "register"]);
+
 Route::post("login", [PharController::class, "login"]);
 
 Route::group(["middleware" => "CustomAuthorization"], function () {
@@ -42,7 +43,6 @@ Route::group(["middleware" => "CustomAuthorization"], function () {
 });
 
 
-##############   Admin Routes   ##############
 
 
 

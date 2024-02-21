@@ -83,7 +83,7 @@ class MedicationController extends Controller
                 "status" => true,
                 "message" => "done",
                 "statusNumber" => 200,
-                "medicines" => $med->makeHidden(["expire_date", "quantity", "manufacturer", "commercial_name"])
+                "medicines" => $med->makeHidden(["expire_date", "quantity", "manufacturer", "commercial_name"])->makeVisible("id")
 
             ]);
         }
@@ -105,7 +105,7 @@ class MedicationController extends Controller
                 "status" => true,
                 "message" => "done",
                 "statusNumber" => 200,
-                "details" => $med
+                "details" => $med->makeVisible("id")
             ]);
         }
         return response()->json([

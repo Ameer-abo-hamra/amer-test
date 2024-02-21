@@ -14,8 +14,8 @@ return new class extends Migration
         Schema::create('reqs', function (Blueprint $table) {
             $table->id();
             $table->foreignId("phar_id")->constrained("phars");
-            $table->text("payment_state")->default("غير مدفوع");
-            $table->text("receive_state")->default("قيد التحضير");
+            $table->text("payment_state")->default("unpaid");
+            $table->text("receive_state")->default("processing");
             $table->unsignedFloat("price");
             $table->boolean("isUpdated")->default(false);
             $table->timestamps();
